@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  backend:
+    container_name: backend
+    image: backend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    env_file:
+      - ./.env
+    ports:
+      - 3000:80
+
+  postgres:
+    image: postgres:alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=dreamoval
+    volumes:
+    - db-data:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    healthcheck:
+      test: ["pg_isready", "-U", "{POSTGRES_USER}"]
+      interval: 30s
+      timeout: 30s
+      retries: 5
+
+volumes:
+  db-data:
