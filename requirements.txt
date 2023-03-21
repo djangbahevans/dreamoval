@@ -6,3 +6,4 @@ python-jose
 psycopg2
 dotenv
 bcrypt
+pytest
